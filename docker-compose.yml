@@ -1,0 +1,24 @@
+services:
+  mysql:
+    container_name:mySql-container
+    image:mysql:latest
+  environment:
+    MYSQL_ROOT_PASSWORD:password
+    MYSQL_USERNAME:admin
+    MYSQL_PASSWORD:password
+    MYSQL_DATABASE:auth_jwt_sch
+  ports:
+    -"3306:3306"
+  volumes:
+    -mysql-data:/var/lib/mysql
+  restart:unless-stopped
+
+  auth-server:
+    container_name:auth-container
+    image:kochikame/auth-container
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
+  ports:
+    -"8888:8080"
+  depends_on:
+    - mysql
